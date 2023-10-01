@@ -74,7 +74,7 @@ def chat():
         data = request.get_json()
         user_input = data["text"]
         print(user_input)
-        chat_model = sessions[data["session_id"]]["chat_model"]
+        chat_model = sessions[data.get("session_id", sessions.keys()[]0])]["chat_model"]
         response = chat_model.predict(user_input)
         try:
             parsed = json.parse(response)
