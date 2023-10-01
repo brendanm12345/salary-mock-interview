@@ -30,7 +30,11 @@ export default function Configuration() {
     e.preventDefault();
     try {
       console.log(formData)
-      await axios.post('http://127.0.0.1:5000/new', formData);
+      await axios.post('http://127.0.0.1:5000/new', formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
     } catch (error) {
       console.error('There was an error sending the data', error);
     }
