@@ -1,6 +1,5 @@
 import { Metadata } from "next";
-import { Button } from "@/components/ui/button";
-import Configuration from "@/components/ui/configuration-form"; // Adjust the path accordingly to where your Configuration component is located.
+=import Configuration from "@/components/ui/configuration-form"; // Adjust the path accordingly to where your Configuration component is located.
 
 export const metadata: Metadata = {
   title: "T2",
