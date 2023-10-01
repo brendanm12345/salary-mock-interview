@@ -41,22 +41,21 @@ const InterviewPage: React.FC = () => {
     }, []);
 
     return (
-        <div>
-            <h1>AI Chat Agent</h1>
-            <div style={{ height: '400px', overflowY: 'auto', border: '1px solid black', padding: '10px' }}>
+        <div className='p-8'>
+            <div className="h-96 overflow-y-auto border border-black p-2.5 rounded-md">
                 {messages.map((msg, idx) => (
                     <div key={idx}>{msg}</div>
                 ))}
             </div>
-            <div style={{ marginTop: '10px' }}>
+            <div className='flex flex-row justify-between mt-4 rounded-md space-x-4'>
                 <input 
                     type="text" 
                     value={inputValue} 
                     onChange={e => setInputValue(e.target.value)}
                     placeholder="Type your message..."
-                    style={{ width: '80%', marginRight: '10px' }}
+                    className='w-full p-4 flex-direction bg-slate-100 '
                 />
-                <button onClick={handleSendMessage}>Send</button>
+                <button className='p-4 bg-black text-white' onClick={handleSendMessage}>Send</button>
             </div>
         </div>
     );

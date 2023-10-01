@@ -11,7 +11,6 @@ export default function Configuration() {
               Practicing mock interviews for salary negotiation is essential as it helps individuals to refine their communication skills, build confidence, and strategically articulate their value and compensation needs, improving the likelihood of securing a desirable salary package.
             </p>
           </div>
-
           <div className="sm:col-span-4">
             <label htmlFor="website" className="block text-sm font-medium leading-6 text-gray-900">
               Profile
