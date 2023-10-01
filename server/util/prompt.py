@@ -14,6 +14,7 @@ def get_initial_prompt(
     """
     metadata_template = {
         "candidate_name": "string",
+        "recruiter_name": "string (invent a realistic recruiter name)",
         "company_name": "string",
         "job_title": "string",
         "job_description_summary": "string (just one sentence)",
@@ -60,6 +61,7 @@ def get_initial_prompt(
 
 def get_second_prompt():
     prompt = """Great. Now welcome your candidate and begin the conversation. From this point forward, all your responses should be JSON formatted to match the template `{"message": "string"}`. When the conversation is over and it's time to hang up, you can add a field to your response `{"message": "string", "event": "interview_finished"}`. Remember to be professional and courteous, but realistically conversational."""
+    return prompt
 
 
 def sanitize(text):
@@ -67,7 +69,8 @@ def sanitize(text):
 
 
 def get_final_prompt():
-    return """The interview is now complete. Based on the above conversation history, please provide a detailed summary and feedback focusing on the user's behavior and performance in this mock salary negotiation. Evaluate the clarity and effectiveness of communication, justification for the desired salary, handling of objections, and overall negotiation strategy. Additionally, provide constructive feedback on areas of improvement and recommend strategies or resources to enhance negotiation skills."""
+    prompt = """The interview is now complete. Based on the above conversation history, please provide a detailed summary and feedback focusing on the user's behavior and performance in this mock salary negotiation. Evaluate the clarity and effectiveness of communication, justification for the desired salary, handling of objections, and overall negotiation strategy. Additionally, provide constructive feedback on areas of improvement and recommend strategies or resources to enhance negotiation skills."""
+    return prompt
 
 
 if __name__ == "__main__":

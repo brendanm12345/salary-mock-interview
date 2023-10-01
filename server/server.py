@@ -1,3 +1,4 @@
+import json
 import sys
 from flask import Flask
 from flask_cors import CORS
@@ -8,7 +9,7 @@ import os
 from uuid import uuid4
 
 import requests
-from util.prompt import get_initial_prompt
+from util.prompt import get_initial_prompt, get_second_prompt
 from util.scrape import parse_url
 
 load_dotenv("../.env")
@@ -26,12 +27,8 @@ CORS(
 @app.route("/new", methods=["POST"])
 def new_chat():
     try:
-        app.logger.info("GOT NEW CHAT REQ")
+        app.logger.warning("GOT NEW CHAT REQ")
         data = request.get_json()
-        candidate_url = data["candidate_url"]
-        job_description_url = data["job_description_url"]
-        minimum_salary = data.get("minimum_salary", None)
-        maximum_salary = data.get("maximum_salary", None)
         session_id = uuid4()
 
         sessions[session_id] = {
@@ -44,20 +41,28 @@ def new_chat():
             )
         }
 
+        sessions[session_id]["session_id"] = session_id
+
         chat_model = ChatOpenAI(openai_api_key=openai_key)
-        candidate = parse_url(candidate_url)
-        job_description = parse_url(job_description_url)
+        candidate = parse_url(data["candidate_url"])
+        job_description = parse_url(data["job_description_url"])
         initial_prompt = get_initial_prompt(
-            candidate, job_description, minimum_salary, maximum_salary
+            candidate, job_description, data["minimum_salary"], data["maximum_salary"]
         )
 
         metadata_response = chat_model.predict(initial_prompt)
-        print(metadata_response)
-        response = chat_model.predict("")
+        print(f"{metadata_response=}")
+        second_prompt = get_second_prompt()
+        response = chat_model.predict(second_prompt)
 
         sessions[session_id]["chat_model"] = chat_model
+        sessions[session_id]["messages"] = [response]
 
-        return jsonify(response=response)
+        return jsonify(
+            response={
+                k: v for (k, v) in sessions[session_id].items() if k != "chat_model"
+            }
+        )
     except Exception as e:
         return jsonify(error=str(e)), 500
 
@@ -89,7 +94,13 @@ if __name__ == "__main__":
             "maximum_salary": 200000,
         }
 
-        resp = requests.post("http://localhost:5000/new", json=args)
+        print(json.dumps(args))
+        resp = requests.post(
+            "http://localhost:5000/new",
+            json=args,
+            headers={"Content-Type": "application/json"},
+        )
         print(f"{resp.text=}")
+        print(f"{resp.status_code=}")
     else:
         app.run(port=5000)
