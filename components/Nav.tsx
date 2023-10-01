@@ -25,33 +25,11 @@ export const Nav = () => {
         <div className="relative flex items-center justify-between h-16">
           <div className="flex">
             <Link href="/">
-              <div className="flex items-center justify-center w-24">
-                <span className="ml-2 font-bold">T2</span>
+              <div className="flex items-center justify-center w-auto">
+                <span className="ml-2 font-bold">Salary Mock Interview</span>
               </div>
             </Link>
           </div>
-          <div className="sm:flex hidden">
-            <Link
-              className="px-3 py-3.5 rounded-md text-sm font-medium focus:outline-none hover:bg-primary-color hover:text-secondary-color"
-              href="/"
-            >
-              Explore
-            </Link>
-
-            <Link
-              className="px-3 py-3.5 rounded-md text-sm font-medium focus:outline-none hover:bg-primary-color hover:text-secondary-color"
-              href="/"
-            >
-              Features
-            </Link>
-            <Link
-              className="px-3 py-3.5 rounded-md text-sm font-medium focus:outline-none hover:bg-primary-color hover:text-secondary-color"
-              href="/"
-            >
-              FAQ
-            </Link>
-          </div>
-
           <div className="flex justify-center sm:items-stretch sm:justify-start">
             <div className="hidden sm:flex">
               <div className="flex justify-end w-24">
@@ -59,7 +37,6 @@ export const Nav = () => {
               </div>
             </div>
           </div>
-
           <DropdownMenu>
             <DropdownMenuTrigger className="sm:hidden" asChild>
               <Button size={"icon"} variant={"outline"}>
