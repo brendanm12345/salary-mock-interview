@@ -50,9 +50,11 @@ def new_chat():
             candidate, job_description, data["minimum_salary"], data["maximum_salary"]
         )
 
+        print(initial_prompt)
         metadata_response = chat_model.predict(initial_prompt)
         print(f"{metadata_response=}")
         second_prompt = get_second_prompt()
+        print(second_prompt)
         response = chat_model.predict(second_prompt)
 
         sessions[session_id]["chat_model"] = chat_model
