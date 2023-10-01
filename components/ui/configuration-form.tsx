@@ -18,7 +18,7 @@ export default function Configuration() {
           <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
             <div className="sm:col-span-4">
               <label htmlFor="website" className="block text-sm font-medium leading-6 text-gray-900">
-                Profile
+                Candidate Profile
               </label>
               <div className="mt-2">
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
@@ -36,7 +36,7 @@ export default function Configuration() {
 
             <div className="sm:col-span-4">
               <label htmlFor="website" className="block text-sm font-medium leading-6 text-gray-900">
-                Job Post
+                Job Description
               </label>
               <div className="mt-2">
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
@@ -54,7 +54,7 @@ export default function Configuration() {
 
             <div className="col-span-full">
               <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
-                Negotiation Goal
+                Minimum Salary
               </label>
               <div className="mt-2">
                 <textarea
@@ -65,8 +65,23 @@ export default function Configuration() {
                   defaultValue={''}
                 />
               </div>
-              <p className="mt-3 text-sm leading-6 text-gray-600">For example, my goal for salary negotation is to get at least $150,000</p>
             </div>
+
+            <div className="col-span-full">
+              <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                Maximum Salary
+              </label>
+              <div className="mt-2">
+                <textarea
+                  id="about"
+                  name="about"
+                  rows={2}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  defaultValue={''}
+                />
+              </div>
+            </div>
+
           </div>
 
           <div className="mt-6 flex items-center justify-end gap-x-6">
