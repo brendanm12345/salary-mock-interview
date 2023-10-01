@@ -27,7 +27,7 @@ def get_initial_prompt(
 
     prompt = dedent(
         f"""
-        You are going to simulate a conversation as a recruiter from a company discussing an offer with a candidate, John W. Smith. This interaction is verbal and should be realistic, professional, courteous, yet conversational.
+        You are going to simulate a conversation as a recruiter from a company discussing an offer with a candidate. This is not an interview, it is a salary negotiation. This interaction is verbal and should be realistic, professional, courteous, yet conversational. You should NOT return any templated text (such as [name]) in the "message" from this point forward.
 
         Candidate information:
         ```
