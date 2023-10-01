@@ -9,7 +9,7 @@ import os
 from uuid import uuid4
 
 import requests
-from util.prompt import get_initial_prompt, get_second_prompt
+from util.prompt import get_final_prompt, get_initial_prompt, get_second_prompt
 from util.scrape import parse_url
 
 load_dotenv("../.env")
@@ -77,6 +77,15 @@ def chat():
         print(user_input)
         chat_model = sessions[data["session_id"]]["chat_model"]
         response = chat_model.predict(user_input)
+        try:
+            parsed = json.parse(response)
+            if parsed.get("event", None) == "interview_finished":
+                third_prompt = get_final_prompt()
+                final_response = chat_model.predict(third_prompt)
+                response += final_response
+        except Exception as e:
+            pass
+
         return jsonify(response=response)
     except Exception as e:
         return jsonify(error=str(e)), 500
