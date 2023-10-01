@@ -3,3 +3,5 @@ openai
 Flask
 flask_cors
 python-dotenv
+requests
+unstructured[all-docs]
