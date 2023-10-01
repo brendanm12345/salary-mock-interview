@@ -1,8 +1,44 @@
-import React from 'react';
+// import React from 'react';
+'use client';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
+import axios from 'axios';
+
+interface FormData {
+  candidate_url: string;
+  job_description_url: string;
+  minimum_salary: string;
+  maximum_salary: string;
+}
 
 export default function Configuration() {
+  
+  const [formData, setFormData] = useState<FormData>({
+    candidate_url: '',
+    job_description_url: '',
+    minimum_salary: '',
+    maximum_salary:  '',
+  });
+
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({ ...prevState, [name]: value }));
+  };
+
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      console.log(formData)
+      await axios.post('http://localhost:5000/new', formData);
+    } catch (error) {
+      console.error('There was an error sending the data', error);
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
+
       <div className="flex space-x-12">
         
         <div className="flex-shrink-0 w-1/3">
@@ -29,11 +65,12 @@ export default function Configuration() {
                     id="datasource"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     placeholder="www.linkedin.com"
+                    onChange={handleChange}
                   />
                 </div>
               </div>
             </div>
-
+        
             <div className="sm:col-span-4">
               <label htmlFor="website" className="block text-sm font-medium leading-6 text-gray-900">
                 Job Description
@@ -47,6 +84,7 @@ export default function Configuration() {
                     id="datasource"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     placeholder="jobs.linkedin.com"
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -63,6 +101,7 @@ export default function Configuration() {
                   rows={2}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   defaultValue={''}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -78,6 +117,7 @@ export default function Configuration() {
                   rows={2}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   defaultValue={''}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -96,7 +136,6 @@ export default function Configuration() {
             </button>
           </div>
         </div>
-        
       </div>
     </form>
   );
