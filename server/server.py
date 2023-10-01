@@ -60,6 +60,8 @@ def new_chat():
         sessions[session_id]["chat_model"] = chat_model
         sessions[session_id]["messages"] = [response]
 
+        response.headers.add('Access-Control-Allow-Origin', '*')
+
         return jsonify(
             response={
                 k: v for (k, v) in sessions[session_id].items() if k != "chat_model"
@@ -86,6 +88,7 @@ def chat():
         except Exception as e:
             pass
 
+        response.headers.add('Access-Control-Allow-Origin', '*')
         return jsonify(response=response)
     except Exception as e:
         return jsonify(error=str(e)), 500
