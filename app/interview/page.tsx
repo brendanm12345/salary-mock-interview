@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 const InterviewPage: React.FC = () => {
     const [data, setData] = useState({ message: '' });
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [messages, setMessages] = useState<Array<string>>([]);
     const [inputValue, setInputValue] = useState('');
 
@@ -21,6 +22,9 @@ const InterviewPage: React.FC = () => {
     // Send the current input value to the server and get AI's response
     async function handleSendMessage() {
         try {
+            setMessages([...messages, `You: ${inputValue}`]);
+            setIsLoading(true); // set loading state to true
+
             const response = await fetch(`http://127.0.0.1:5000/chat`, {
                 method: 'POST',
                 headers: {
@@ -28,11 +32,14 @@ const InterviewPage: React.FC = () => {
                 },
                 body: JSON.stringify({ text: inputValue })
             });
+
             const responseData = await response.json();
             setMessages([...messages, `You: ${inputValue}`, `AI: ${responseData.response}`]);
+            setIsLoading(false); // reset loading state to false
             setInputValue('');
         } catch (error) {
             console.error(error);
+            setIsLoading(false); // reset loading state to false in case of error
         }
     }
 
@@ -46,6 +53,7 @@ const InterviewPage: React.FC = () => {
                 {messages.map((msg, idx) => (
                     <div key={idx}>{msg}</div>
                 ))}
+                {isLoading && <div>Loading...</div>} {/* Display loading when processing */}
             </div>
             <div className='flex flex-row justify-between mt-4 rounded-md space-x-4'>
                 <input 
