@@ -8,17 +8,6 @@ const InterviewPage: React.FC = () => {
     const [messages, setMessages] = useState<Array<string>>([]);
     const [inputValue, setInputValue] = useState('');
 
-    // Fetch the initial greeting from the server
-    async function fetchDataFromServer() {
-        try {
-            const response = await fetch('http://127.0.0.1:5000/');
-            const data = await response.json();
-            setData(data);
-        } catch (error) {
-            console.error(error);
-        }      
-    }
-
     // Send the current input value to the server and get AI's response
     async function handleSendMessage() {
         try {
@@ -42,10 +31,6 @@ const InterviewPage: React.FC = () => {
             setIsLoading(false); // reset loading state to false in case of error
         }
     }
-
-    useEffect(() => {
-        fetchDataFromServer();
-    }, []);
 
     return (
         <div className='p-8'>

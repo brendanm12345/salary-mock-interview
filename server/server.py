@@ -26,7 +26,7 @@ openai_key = os.getenv("OPENAI_API_KEY")
 sessions = {}
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/*": {"origins": ("*", "localhost:3000", "127.0.0.1:3000")}})
 
 
 @app.route("/new", methods=["POST"])
@@ -72,13 +72,14 @@ def new_chat():
         )
     except Exception as e:
         return jsonify(error=str(e)), 500
-    
+
 
 # Load the document and set up the retriever
-documents = TextLoader("path_to_your_document.txt").load() # Update the path to the actual file location
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
-texts = text_splitter.split_documents(documents)
-retriever = FAISS.from_documents(texts, OpenAIEmbeddings()).as_retriever(search_kwargs={"k": 5}) # We'll retrieve top 5 relevant chunks
+# documents = TextLoader("path_to_your_document.txt").load() # Update the path to the actual file location
+# text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+# texts = text_splitter.split_documents(documents)
+# retriever = FAISS.from_documents(texts, OpenAIEmbeddings()).as_retriever(search_kwargs={"k": 5}) # We'll retrieve top 5 relevant chunks
+
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -154,13 +155,13 @@ def chat():
                 final_response = chat_model.predict(third_prompt)
                 response += final_response
         except Exception as e:
+            app.logger.warning("RECOVERED")
             pass
 
         print(response)
         return jsonify(response=str(response.content))
     except Exception as e:
         return jsonify(error=str(e)), 500
-
 
 
 # @app.route("/chat", methods=["POST"])
