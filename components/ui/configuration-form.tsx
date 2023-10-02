@@ -3,6 +3,10 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 
+import Link from 'next/link';
+
+
+
 interface FormData {
   candidate_url: string;
   job_description_url: string;
@@ -127,15 +131,22 @@ export default function Configuration() {
             </div>
           </div>
           <div className="mt-6 flex items-center justify-end gap-x-6">
+
             <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
               Cancel
             </button>
+
+            <Link href="/interview">
+            <a>
+
             <button
               type="submit"
               className="rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Start
             </button>
+            </a>
+          </Link>
           </div>
         </div>
       </div>

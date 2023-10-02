@@ -26,6 +26,7 @@ sessions = {}
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
+
 @app.route("/new", methods=["POST"])
 def new_chat():
     try:
