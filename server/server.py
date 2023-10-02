@@ -85,22 +85,6 @@ def chat():
     try:
         data = request.get_json()
         user_input = data["text"]
-<<<<<<< Updated upstream
-        print(user_input)
-        
-        # Check if the question is related to the loaded document
-        if "document" in user_input.lower():
-            docs = retriever.get_relevant_documents(user_input)
-            
-            # You can handle the return in multiple ways. Here, we just concatenate the top chunks.
-            response = "\n".join([d.page_content for d in docs])
-            
-            return jsonify(response=response)
-
-        chat_model = sessions[data.get("session_id", list(sessions.keys())[0])]["chat_model"]
-        response = chat_model.predict(user_input)
-        
-=======
         app.logger.warning(user_input)
         if "session_id" not in data and len(list(sessions.keys())) == 0:
             data = {
@@ -163,7 +147,6 @@ def chat():
         response = chat_model.predict_messages(sessions[session_id]["messages"])
 
         sessions[session_id]["messages"].append(response)
->>>>>>> Stashed changes
         try:
             parsed = json.parse(response)
             if parsed.get("event", None) == "interview_finished":
