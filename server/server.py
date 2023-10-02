@@ -141,25 +141,31 @@ def chat():
             data["session_id"] = session_id
             app.logger.warning("INIT SESSION")
 
-        chat_model = sessions[data.get("session_id", list(sessions.keys())[0])][
-            "chat_model"
-        ]
+        session_id = data.get("session_id", list(sessions.keys())[0])
+        chat_model = sessions[session_id]["chat_model"]
         sessions[session_id]["messages"].append(HumanMessage(content=user_input))
         response = chat_model.predict_messages(sessions[session_id]["messages"])
 
         sessions[session_id]["messages"].append(response)
         try:
-            parsed = json.parse(response)
-            if parsed.get("event", None) == "interview_finished":
+            response = json.loads(str(response.content))["message"]
+            if response.get("event", None) == "interview_finished":
                 third_prompt = get_final_prompt()
-                final_response = chat_model.predict(third_prompt)
+                sessions[session_id]["messages"].append(
+                    HumanMessage(content=third_prompt)
+                )
+
+                final_response = chat_model.predict_messages(
+                    sessions[session_id]["messages"]
+                )
                 response += final_response
         except Exception as e:
             app.logger.warning("RECOVERED")
+            app.logger.warning(e)
             pass
 
         print(response)
-        return jsonify(response=str(response.content))
+        return jsonify(response=str(response))
     except Exception as e:
         return jsonify(error=str(e)), 500
 

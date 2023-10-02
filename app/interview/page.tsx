@@ -23,7 +23,8 @@ const InterviewPage: React.FC = () => {
             });
 
             const responseData = await response.json();
-            setMessages([...messages, `You: ${inputValue}`, `AI: ${responseData.response.message}`]);
+            console.log("RESPONSE DATA", responseData.response);
+            setMessages([...messages, `You: ${inputValue}`, `AI: ${responseData.response}`]);
             setIsLoading(false); // reset loading state to false
             setInputValue('');
         } catch (error) {
