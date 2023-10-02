@@ -1,3 +1,5 @@
+from langchain.schema import AIMessage, HumanMessage, SystemMessage
+
 import json
 import sys
 from flask import Flask
@@ -53,11 +55,11 @@ def new_chat():
             candidate, job_description, data["minimum_salary"], data["maximum_salary"]
         )
 
-        print(initial_prompt)
+        app.logger.warning(initial_prompt)
         metadata_response = chat_model.predict(initial_prompt)
-        print(f"{metadata_response=}")
+        app.logger.warning(f"{metadata_response=}")
         second_prompt = get_second_prompt()
-        print(second_prompt)
+        app.logger.warning(second_prompt)
         response = chat_model.predict(second_prompt)
 
         sessions[session_id]["chat_model"] = chat_model
@@ -83,6 +85,7 @@ def chat():
     try:
         data = request.get_json()
         user_input = data["text"]
+<<<<<<< Updated upstream
         print(user_input)
         
         # Check if the question is related to the loaded document
@@ -97,6 +100,70 @@ def chat():
         chat_model = sessions[data.get("session_id", list(sessions.keys())[0])]["chat_model"]
         response = chat_model.predict(user_input)
         
+=======
+        app.logger.warning(user_input)
+        if "session_id" not in data and len(list(sessions.keys())) == 0:
+            data = {
+                "candidate_url": "https://s3.amazonaws.com/nicbor.com/sample_resume.html",
+                "job_description_url": "https://s3.amazonaws.com/nicbor.com/sample_job_description.html",
+                "maximum_salary": 200000,
+                "minimum_salary": 100000,
+            }
+            session_id = uuid4()
+
+            sessions[session_id] = {
+                k: data[k]
+                for k in (
+                    "candidate_url",
+                    "job_description_url",
+                    "minimum_salary",
+                    "maximum_salary",
+                )
+            }
+
+            sessions[session_id]["session_id"] = session_id
+            sessions[session_id]["messages"] = []
+
+            chat_model = ChatOpenAI(openai_api_key=openai_key)
+            candidate = parse_url(data["candidate_url"])
+            job_description = parse_url(data["job_description_url"])
+            initial_prompt = get_initial_prompt(
+                candidate,
+                job_description,
+                data["minimum_salary"],
+                data["maximum_salary"],
+            )
+
+            app.logger.warning(initial_prompt)
+            sessions[session_id]["messages"].append(
+                HumanMessage(content=initial_prompt)
+            )
+
+            metadata_response = chat_model.predict_messages(
+                sessions[session_id]["messages"]
+            )
+            sessions[session_id]["messages"].append(metadata_response)
+            app.logger.warning(f"{metadata_response=}")
+            second_prompt = get_second_prompt()
+            sessions[session_id]["messages"].append(HumanMessage(content=second_prompt))
+            app.logger.warning(second_prompt)
+            response = chat_model.predict_messages(sessions[session_id]["messages"])
+
+            sessions[session_id]["chat_model"] = chat_model
+
+            sessions[session_id]["messages"].append(response)
+
+            data["session_id"] = session_id
+            app.logger.warning("INIT SESSION")
+
+        chat_model = sessions[data.get("session_id", list(sessions.keys())[0])][
+            "chat_model"
+        ]
+        sessions[session_id]["messages"].append(HumanMessage(content=user_input))
+        response = chat_model.predict_messages(sessions[session_id]["messages"])
+
+        sessions[session_id]["messages"].append(response)
+>>>>>>> Stashed changes
         try:
             parsed = json.parse(response)
             if parsed.get("event", None) == "interview_finished":
@@ -106,7 +173,8 @@ def chat():
         except Exception as e:
             pass
 
-        return jsonify(response=response)
+        print(response)
+        return jsonify(response=str(response.content))
     except Exception as e:
         return jsonify(error=str(e)), 500
 
@@ -148,13 +216,13 @@ if __name__ == "__main__":
             "maximum_salary": 200000,
         }
 
-        print(json.dumps(args))
+        app.logger.warning(json.dumps(args))
         resp = requests.post(
             "http://localhost:5000/new",
             json=args,
             headers={"Content-Type": "application/json"},
         )
-        print(f"{resp.text=}")
-        print(f"{resp.status_code=}")
+        app.logger.warning(f"{resp.text=}")
+        app.logger.warning(f"{resp.status_code=}")
     else:
         app.run(port=5000)
