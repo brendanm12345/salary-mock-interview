@@ -21,6 +21,7 @@ sessions = {}
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
+
 @app.route("/new", methods=["POST"])
 def new_chat():
     try:
@@ -57,8 +58,6 @@ def new_chat():
         sessions[session_id]["chat_model"] = chat_model
         sessions[session_id]["messages"] = [response]
 
-        response.headers.add('Access-Control-Allow-Origin', '*')
-
         return jsonify(
             response={
                 k: v for (k, v) in sessions[session_id].items() if k != "chat_model"
@@ -74,7 +73,7 @@ def chat():
         data = request.get_json()
         user_input = data["text"]
         print(user_input)
-        chat_model = sessions[data.get("session_id", sessions.keys()[]0])]["chat_model"]
+        chat_model = sessions[data.get("session_id", list(sessions.keys())[0])]["chat_model"]
         response = chat_model.predict(user_input)
         try:
             parsed = json.parse(response)
@@ -85,7 +84,6 @@ def chat():
         except Exception as e:
             pass
 
-        response.headers.add('Access-Control-Allow-Origin', '*')
         return jsonify(response=response)
     except Exception as e:
         return jsonify(error=str(e)), 500
