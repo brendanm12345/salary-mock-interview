@@ -1,4 +1,6 @@
-## Le T2 Template
+## Salary Mock Interview
+
+practice comp conversations
 
 ```bash
 yarn dev
