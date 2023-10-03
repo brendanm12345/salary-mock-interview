@@ -2,6 +2,8 @@
 
 practice comp conversations
 
+twitter demo: https://twitter.com/brendanm0407/status/1709101053684461729
+
 ```bash
 yarn dev
 ```
